@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title: "CRC-protected UART Command Interface"
+  author: "Prajan, Name 2, Name 3, Name 4, Shylashree N, RV College of Engineering"
+  discord: ""
+  description: "UART command interface with CRC-8 checking, ACK/NAK replies, GPIO and PWM registers"
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -23,9 +23,9 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
+  ui[0]: "rx (serial in)"
+  ui[1]: "baud_sel[0]"
+  ui[2]: "baud_sel[1]"
   ui[3]: ""
   ui[4]: ""
   ui[5]: ""
@@ -33,20 +33,20 @@ pinout:
   ui[7]: ""
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
+  uo[0]: "tx (serial out)"
+  uo[1]: "pkt_ok"
+  uo[2]: "pkt_err"
+  uo[3]: "pwm_out"
+  uo[4]: "rx_valid"
   uo[5]: ""
   uo[6]: ""
   uo[7]: ""
 
-  # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
+  # Bidirectional
+  uio[0]: "gpio[0]"
+  uio[1]: "gpio[1]"
+  uio[2]: "gpio[2]"
+  uio[3]: "gpio[3]"
   uio[4]: ""
   uio[5]: ""
   uio[6]: ""
