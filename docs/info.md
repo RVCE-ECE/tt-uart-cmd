@@ -1,20 +1,16 @@
 <!---
-
 This file is used to generate your project datasheet. Please fill in the information below and delete any unused
 sections.
-
-You can also include images in this folder and reference them in the markdown. Each image must be less than
-512 kb in size, and the combined size of all images must be less than 1 MB.
--->
+--->
 
 ## How it works
 
-Explain how your project works
+A host sends 5-byte packets over UART: start byte 0xA5, command, address, data, and a CRC-8. The chip rebuilds each byte, checks the CRC, runs the command (write or read a register, or ping), and replies with ACK (0x06) or NAK (0x15). Registers control four GPIO pins, a PWM output, and a bad-packet counter.
 
 ## How to test
 
-Explain how to use your project
+Send a valid packet and check that `pkt_ok` goes high and an ACK byte comes out on `tx`. Send a packet with a wrong CRC and check that `pkt_err` goes high and a NAK comes back. Simulation tests are in `test/test.py` (run `make -B` in `test/`).
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+A USB-to-serial adapter (3.3 V) or the Tiny Tapeout demo board microcontroller can drive `rx` and read `tx`.
