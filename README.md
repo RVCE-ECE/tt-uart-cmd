@@ -1,42 +1,68 @@
-![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
+# CRC-Protected UART Command Interface
 
-# Tiny Tapeout Verilog Project Template
+![gds](../../workflows/gds/badge.svg) ![docs](../../workflows/docs/badge.svg) ![test](../../workflows/test/badge.svg)
 
-- [Read the documentation for project](docs/info.md)
+A digital ASIC for the [Tiny Tapeout](https://tinytapeout.com) SKY26e shuttle (SKY130, 1x1 tile). A host sends 5-byte command packets over a UART. The chip checks each packet with a CRC-8 in hardware, executes the command on a small register file (4 GPIO pins and an 8-bit PWM output), and replies with ACK or NAK. Corrupted or invalid packets are rejected and counted, so a bad command can never change the outputs.
 
-## What is Tiny Tapeout?
+Full description, register map, block diagram and implementation results: [docs/info.md](docs/info.md)
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+## Features
 
-To learn more and get started, visit https://tinytapeout.com.
+- UART receiver and transmitter (8N1), four selectable baud rates
+- CRC-8 (polynomial 0x07) checked in hardware, one byte per clock
+- Packet FSM with ACK (0x06) / NAK (0x15) replies
+- Register file: GPIO output, GPIO direction, PWM duty, status
+- 8-bit PWM generator and 4 bidirectional GPIO pins
+- Bad-packet counter, receive timeout, and automatic resynchronization after junk bytes
 
-## Set up your Verilog project
+## Packet format
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+`[0xA5][CMD][ADDR][DATA][CRC8]`
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+| CMD | Action |
+|---|---|
+| `0x01` | Write DATA to register ADDR |
+| `0x02` | Read register ADDR (reply: ACK + value) |
+| `0x03` | Ping (reply: ACK) |
 
-## Enable GitHub actions to build the results page
+Example: ping = `A5 03 00 00 BD`, reply = `06`.
 
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
+## Pins
 
-## Resources
+| Pin | Function |
+|---|---|
+| `ui[0]` | Serial input (rx) |
+| `ui[2:1]` | Baud select: 00 = 115200, 01 = 57600, 10 = 230400, 11 = fast mode (simulation) |
+| `uo[0]` | Serial output (tx) |
+| `uo[1]` | Packet OK |
+| `uo[2]` | Packet error |
+| `uo[3]` | PWM output |
+| `uo[4]` | Byte received pulse (debug) |
+| `uio[3:0]` | GPIO, direction set by the GPIO_DIR register |
 
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
+## Repository layout
 
-## What next?
+| Path | Contents |
+|---|---|
+| `src/project.v` | All RTL: UART RX/TX, CRC-8, packet FSM, register file, PWM, top level |
+| `test/test.py` | cocotb tests (host model, bad CRC, junk bytes, timeout, all baud rates) |
+| `test/tb.v` | Simulation wrapper |
+| `docs/info.md` | Datasheet |
+| `info.yaml` | Tiny Tapeout project description and pinout |
 
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+## Run the tests
+
+```bash
+cd test
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+make -B
+```
+
+## Credits
+
+This project was executed by Author 1, Author 2, Author 3, Author 4, and Shylashree N from RVCE.
+
+We gratefully acknowledge the Center of Excellence (CoE) in Integrated Circuits and Systems (ICAS) and the Department of Electronics and Communication Engineering (ECE) for providing the necessary resources and guidance.
+
+Special thanks to Dr. H V Ravish Aradhya (HoD - ECE), Dr. K R Usha Rani (Associate Dean - PG), Dr. K. S. Geetha (Vice Principal) and Dr. K. N. Subramanya (Principal) for their constant encouragement and support in facilitating this Tiny Tapeout SKY26e submission.
