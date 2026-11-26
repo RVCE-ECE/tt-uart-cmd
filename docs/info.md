@@ -3,7 +3,7 @@ This file is used to generate your project datasheet. Please fill in the informa
 sections.
 --->
 ## Credits 
-We gratefully acknowledge the Centre of Excellence (CoE) in Integrated Circuits and Systems (ICAS) and Department of Electronics and Communication (ECE) for providing the necessary resources and guidance. Special thanks to Dr. H V Ravish Aradhya (HOD-ECE), Dr. K S Geetha (Vice Principal) and Dr. K N Subramanya (Principal) for their constant support and encouragement to carry out this Tiny Tapeout SKY25a submission.
+We gratefully acknowledge the Centre of Excellence (CoE) in Integrated Circuits and Systems (ICAS) and Department of Electronics and Communication (ECE) for providing the necessary resources and guidance. Special thanks to Dr. H V Ravish Aradhya (HOD-ECE), Dr. K S Geetha (Vice Principal) and Dr. K N Subramanya (Principal) for their constant support and encouragement to carry out this Tiny Tapeout SKY26e submission.
 
 ## How it works
 
