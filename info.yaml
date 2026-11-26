@@ -1,7 +1,7 @@
 # Tiny Tapeout project information
 project:
   title: "CRC-protected UART Command Interface"
-  author: "Prajan, Name 2, Name 3, Name 4, Shylashree N, RV College of Engineering"
+  author: "Prajan, Prithviraj, Pranshul Bhargava, Naman Manoj Jain, Shylashree N, RV College of Engineering"
   discord: ""
   description: "UART command interface with CRC-8 checking, ACK/NAK replies, GPIO and PWM registers"
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
